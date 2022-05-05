@@ -5,7 +5,7 @@ specifiers:
   ace-builds: ^1.4.14
   emitkit: ^1.3.0
   solid-js: ^1.3.17
-  solid-reactor: ^1.1.1
+  solid-reactor: ^1.2.0
   vite: ^2.9.8
   vite-plugin-solid: ^2.2.6
   vite-plugin-windicss: ^1.8.4
@@ -15,7 +15,7 @@ dependencies:
   ace-builds: 1.4.14
   emitkit: 1.3.0
   solid-js: 1.3.17
-  solid-reactor: 1.1.1
+  solid-reactor: 1.2.0
   vite-plugin-windicss: 1.8.4_vite@2.9.8
 
 devDependencies:
@@ -1063,8 +1063,8 @@ packages:
   /solid-js/1.3.17:
     resolution: {integrity: sha512-BFCosxa4hRm+LF7S+kBL5bNr4RtuZif6AaR5FdQkBpV1E6QNLAOFm4HWgEN8vL2aCWEKl384cT8Etw8ziW8aag==}
 
-  /solid-reactor/1.1.1:
-    resolution: {integrity: sha512-U+RmGZBpoJwHhJaGO9rihbkwrj8Ok8faD0MYIHTg+0BoDIIq+6pKmo85mYqvVCRfymRIs0Pi/aRARMBEqB5t6w==}
+  /solid-reactor/1.2.0:
+    resolution: {integrity: sha512-jKSCU3O2yXYnKnE+SuXnNNWB02KtRsQ/CitkrNKNIX0c55XXOodWEbux4oAep5oxxHtSC7ng3b49fN0m0rVmRQ==}
     hasBin: true
     dependencies:
       '@swc/core': 1.2.177
