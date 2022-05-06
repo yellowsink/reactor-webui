@@ -5,19 +5,20 @@ import "virtual:windi.css";
 import "virtual:windi-devtools";
 
 import { initSwc } from "./transform";
-import ReactorEditor from "./ReactorEditor";
+import Editor from "./Editor";
 
 function App() {
   const [swcIsInited, setSwcInited] = createSignal(false);
 
+  const [solid, setSolid] = createSignal("");
+  const [react, setReact] = createSignal("");
+
   onMount(() => initSwc(setSwcInited));
 
   return (
-    <div class="w-screen h-screen grid grid-cols-2">
-      <Show when={swcIsInited()} fallback="SWC is initing, please wait...">
-        <ReactorEditor />
-      </Show>
-    </div>
+    <Show when={swcIsInited()} fallback="SWC is initing, please wait...">
+      <Editor solidOut={setSolid} reactOut={setReact} />
+    </Show>
   );
 }
 

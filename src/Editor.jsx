@@ -1,34 +1,41 @@
-import { createEffect, onMount } from "solid-js";
-import Ace from "ace-builds";
-import "ace-builds/src-noconflict/mode-javascript";
-import "ace-builds/src-noconflict/theme-one_dark";
+import { createEffect, createSignal, Show } from "solid-js";
+import Ace from "./Ace";
+import SolidPreview from "./SolidPreview";
+import transform from "./transform";
 
 export default (props) => {
-  let aceEditor;
-  let ref;
+  const [text, setText] = createSignal("");
+  const [transformed, setTransformed] = createSignal("");
+  const [error, setError] = createSignal();
 
-  onMount(() => {
-    aceEditor = Ace.edit(ref);
-
-    aceEditor.setTheme("ace/theme/one_dark");
-
-    aceEditor.getSession().setMode("ace/mode/javascript");
-
-    if (props.readOnly) aceEditor.setReadOnly(true);
-
-    aceEditor.on("change", () => {
-      if (!props.textOut) return;
-
-      props.textOut(aceEditor.getValue());
-    });
-  });
+  if (props.solidOut) createEffect(() => props.solidOut(text()));
+  if (props.reactOut) createEffect(() => props.reactOut(transformed()));
 
   createEffect(() => {
-    if (!props.textIn) return;
-
-    aceEditor?.setValue(props.textIn());
-    aceEditor?.clearSelection();
+    try {
+      const { code } = transform(text());
+      setTransformed(code);
+      setError();
+    } catch (e) {
+      setError(e);
+    }
   });
 
-  return <div ref={ref} class="font-mono text-code" />;
+  return (
+    <div class="w-screen h-screen grid grid-cols-2 grid-rows-2">
+      {/* solid editor */}
+      <Ace textOut={setText} />
+
+      {/* react code */}
+      <Ace textIn={transformed()} readOnly={true} />
+
+      {/* solid preview */}
+      <SolidPreview code={text()} />
+
+      {/* error view or react output */}
+      <Show when={error()}>
+        <Ace textIn={error()} readOnly={true} />
+      </Show>
+    </div>
+  );
 };
