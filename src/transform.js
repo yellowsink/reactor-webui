@@ -1,6 +1,6 @@
 import init, { printSync, parseSync } from "@swc/wasm-web";
 import { jsxTransform } from "emitkit";
-import reactor from "solid-reactor";
+import reactor from "https://cdn.esm.sh/solid-reactor";
 
 export default (code) =>
   jsxTransform({ printSync, parseSync })(code, { plugin: reactor });
