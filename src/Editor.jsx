@@ -1,7 +1,8 @@
 import { createEffect, createSignal, Show } from "solid-js";
 import Ace from "./Ace";
-import SolidPreview from "./SolidPreview";
+import ReactPreview from "./ReactPreview.jsx";
 import transform from "./transform";
+import SolidPreview from "./SolidPreview";
 
 export default (props) => {
   const [text, setText] = createSignal("");
@@ -22,18 +23,17 @@ export default (props) => {
   });
 
   return (
-    <div class="w-screen h-screen grid grid-cols-2 grid-rows-2">
+    <div class="w-screen h-screen grid grid-cols-2 grid-rows-[1fr,auto]">
       {/* solid editor */}
       <Ace textOut={setText} />
 
       {/* react code */}
       <Ace textIn={transformed()} readOnly={true} />
 
-      {/* solid preview */}
-      <SolidPreview code={text()} />
+      <ReactPreview code={text()} />
 
       {/* error view or react output */}
-      <Show when={error()}>
+      <Show when={error()} fallback={<SolidPreview code={transfomed()} />}>
         <Ace textIn={error()} readOnly={true} />
       </Show>
     </div>
