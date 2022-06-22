@@ -1,4 +1,4 @@
-import { swcTransformer } from "./transform.js";
+import { transformer } from "./transform.js";
 import { createSignal } from "solid-js";
 
 export default (props) => {
@@ -6,7 +6,15 @@ export default (props) => {
 
   const transformed = () => {
     try {
-      const res = swcTransformer(props.code, {});
+      const res = transformer(props.code, {
+        jsc: {
+          target: "es2022",
+          parser: {
+            syntax: "ecmascript",
+            jsx: true
+          }
+        }
+      });
       setErr();
       return res.code;
     } catch (e) {
@@ -15,5 +23,5 @@ export default (props) => {
   };
 
   // TODO: bundle to iife to eval
-  return <div>TODO react preview</div>;
+  return <div>{transformed() ?? err()}</div>;
 };
