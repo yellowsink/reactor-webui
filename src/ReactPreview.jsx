@@ -1,9 +1,10 @@
 import { transformer } from "./transform.js";
-import { createSignal } from "solid-js";
+import { createEffect } from "solid-js";
+import eseval from "./eseval.js";
+import react from "react";
+import ReactDOMClient from "react-dom/client";
 
 export default (props) => {
-  const [err, setErr] = createSignal(false);
-
   const transformed = () => {
     try {
       const res = transformer(props.code, {
@@ -11,17 +12,28 @@ export default (props) => {
           target: "es2022",
           parser: {
             syntax: "ecmascript",
-            jsx: true
-          }
-        }
+            jsx: true,
+          },
+        },
       });
-      setErr();
       return res.code;
-    } catch (e) {
-      setErr(e);
-    }
+    } catch {}
   };
 
-  // TODO: bundle to iife to eval
-  return <div>{transformed() ?? err()}</div>;
+  // lmao two reacts
+  const evaled = () => eseval(transformed(), { react, React: react });
+
+  let root;
+
+  createEffect(() => {
+    try {
+      const component = evaled();
+      if (!component) return;
+      const elem = react.createElement(component);
+
+      root.render(elem);
+    } catch {}
+  });
+
+  return <div ref={(ref) => (root = ReactDOMClient.createRoot(ref))} />;
 };
