@@ -4,7 +4,7 @@ import { render } from "solid-js/web";
 import "virtual:windi.css";
 import "virtual:windi-devtools";
 
-import { initSwc } from "./transform";
+import { initSwc } from "./swc.js";
 import Editor from "./Editor";
 
 function App() {

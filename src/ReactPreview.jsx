@@ -1,4 +1,4 @@
-import { transformer } from "./transform.js";
+import { transformer } from "./swc.js";
 import { createEffect } from "solid-js";
 import eseval from "./eseval.js";
 import react from "react";
@@ -20,8 +20,12 @@ export default (props) => {
     } catch {}
   };
 
-  // lmao two reacts
-  const evaled = () => eseval(transformed(), { react, React: react });
+  const evaled = () => {
+    window.onerror = () => true;
+    const res = eseval(transformed(), { react, React: react });
+    window.onerror = null;
+    return res;
+  };
 
   let root;
 
