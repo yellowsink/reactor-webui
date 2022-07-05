@@ -21,10 +21,9 @@ export default (props) => {
   };
 
   const evaled = () => {
-    window.onerror = () => true;
-    const res = eseval(transformed(), { react, React: react });
-    window.onerror = null;
-    return res;
+    try {
+      return eseval(transformed(), {react, React: react});
+    } catch {}
   };
 
   let root;

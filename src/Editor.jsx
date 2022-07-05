@@ -17,13 +17,10 @@ const CustomMonaco = (props) => (
   />
 );
 
-export default (props) => {
+export default () => {
   const [text, setText] = createSignal("");
   const [transformed, setTransformed] = createSignal("");
   const [error, setError] = createSignal();
-
-  if (props.solidOut) createEffect(() => props.solidOut(text()));
-  if (props.reactOut) createEffect(() => props.reactOut(transformed()));
 
   createEffect(() => {
     try {

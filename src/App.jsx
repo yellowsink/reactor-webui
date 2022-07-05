@@ -10,14 +10,11 @@ import Editor from "./Editor";
 function App() {
   const [swcIsInited, setSwcInited] = createSignal(false);
 
-  const [solid, setSolid] = createSignal("");
-  const [react, setReact] = createSignal("");
-
   onMount(() => initSwc(setSwcInited));
 
   return (
     <Show when={swcIsInited()} fallback="SWC is initing, please wait...">
-      <Editor solidOut={setSolid} reactOut={setReact} />
+      <Editor />
     </Show>
   );
 }

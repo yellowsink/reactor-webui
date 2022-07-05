@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import solidPlugin from "vite-plugin-solid";
 import WindiCSS from "vite-plugin-windicss";
+import { resolve } from "path";
 
 export default defineConfig({
   optimizeDeps: {
@@ -11,6 +12,17 @@ export default defineConfig({
     target: "esnext",
     polyfillDynamicImport: false,
     minify: false,
+    commonjsOptions: {
+      // this is necessary for babel to work
+      requireReturnsDefault: "preferred",
+    },
+  },
+
+  resolve: {
+    alias: {
+      // this is ALSO necessary for babel to work
+      assert: resolve("assert.js"),
+    },
   },
 
   plugins: [
