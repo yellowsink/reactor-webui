@@ -2,7 +2,7 @@ import { createEffect, createSignal, Show } from "solid-js";
 import Monaco from "monaco-solid";
 import ReactPreview from "./ReactPreview.jsx";
 import transform from "./swc.js";
-import SolidPreview from "./SolidPreview";
+import SolidPreview from "./SolidPreview.jsx";
 
 const CustomMonaco = (props) => (
   <Monaco

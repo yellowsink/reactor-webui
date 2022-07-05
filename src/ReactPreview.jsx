@@ -22,7 +22,7 @@ export default (props) => {
 
   const evaled = () => {
     try {
-      return eseval(transformed(), {react, React: react});
+      return eseval(`import * as React from "react";\n{${transformed()}}`, {react}).default;
     } catch {}
   };
 
