@@ -34,18 +34,15 @@ export default () => {
 
   return (
     <div class="w-screen h-screen grid grid-cols-2 grid-rows-2">
-      {/* solid code */}
+      {/* react code */}
       <CustomMonaco value={text()} valOut={setText} />
 
-      {/* react code */}
-      <CustomMonaco value={transformed()} readonly={true} />
+      {/* solid code */}
+      <CustomMonaco value={error() ?? transformed()} readonly={true} />
 
       <ReactPreview code={text()} />
 
-      {/* error view or react output */}
-      <Show when={error()} fallback={<SolidPreview code={transformed()} />}>
-        <CustomMonaco value={error()} readonly={true} />
-      </Show>
+      <SolidPreview code={transformed()} />
     </div>
   );
 };

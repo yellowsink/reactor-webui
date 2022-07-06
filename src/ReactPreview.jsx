@@ -22,11 +22,13 @@ export default (props) => {
 
   const evaled = () => {
     try {
-      return eseval(`import * as React from "react";\n{${transformed()}}`, {react}).default;
+      return eseval(`import * as React from "react";\n{${transformed()}}`, {
+        react,
+      }).default;
     } catch {}
   };
 
-  let root;
+  let rdRoot;
 
   createEffect(() => {
     try {
@@ -34,9 +36,12 @@ export default (props) => {
       if (!component) return;
       const elem = react.createElement(component);
 
-      root.render(elem);
+      rdRoot.render(elem);
     } catch {}
   });
 
-  return <div ref={(ref) => (root = ReactDOMClient.createRoot(ref))} />;
+  const refCb = (ref) =>
+    (rdRoot = ReactDOMClient.createRoot(ref.attachShadow({ mode: "open" })));
+
+  return <div ref={refCb} />;
 };

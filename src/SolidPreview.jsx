@@ -22,16 +22,20 @@ export default (props) => {
     } catch {}
   };
 
-  let unrender, ref;
-  createEffect(() => {
-    try {
-      const component = evaled();
-      if (!component || !ref) return;
+  const refCb = (ref) => {
+    const root = ref.attachShadow({mode: "open"});
 
-      unrender?.();
-      unrender = render(component, ref);
-    } catch {}
-  });
+    let unrender;
+    createEffect(() => {
+      try {
+        const component = evaled();
+        if (!component) return;
 
-  return <div ref={ref} />;
+        unrender?.();
+        unrender = render(component, root);
+      } catch {}
+    })
+  }
+
+  return <div ref={refCb} />;
 };
