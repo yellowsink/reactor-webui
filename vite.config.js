@@ -11,7 +11,6 @@ export default defineConfig({
   build: {
     target: "esnext",
     polyfillDynamicImport: false,
-    minify: false,
     commonjsOptions: {
       // this is necessary for babel to work
       requireReturnsDefault: "preferred",
