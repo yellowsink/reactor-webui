@@ -15,6 +15,7 @@ export default defineConfig({
       // this is necessary for babel to work
       requireReturnsDefault: "preferred",
     },
+    sourcemap: true
   },
 
   resolve: {

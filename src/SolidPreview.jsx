@@ -3,14 +3,17 @@ import eseval from "./eseval.js";
 
 import * as solidjs from "solid-js";
 import * as solidjsweb from "solid-js/web";
-import { createEffect } from "solid-js";
+import { createEffect, createSignal, Show } from "solid-js";
 import { render } from "solid-js/web";
 
-import {throttle} from "lodash"
+import { throttle } from "lodash";
+import MonacoEditor from "./MonacoEditor";
 
 export default (props) => {
   const transformed = () => solidCompiler(props.code).code;
   const transformedDebounced = throttle(transformed, 250);
+
+  const [err, setErr] = createSignal();
 
   const evaled = () => {
     props.code;
@@ -19,11 +22,13 @@ export default (props) => {
         "solid-js": solidjs,
         "solid-js/web": solidjsweb,
       }).default;
-    } catch {}
+    } catch (e) {
+      setErr(e);
+    }
   };
 
   const refCb = (ref) => {
-    const root = ref.attachShadow({mode: "open"});
+    const root = ref.attachShadow({ mode: "open" });
 
     let unrender;
     createEffect(() => {
@@ -33,9 +38,20 @@ export default (props) => {
 
         unrender?.();
         unrender = render(component, root);
-      } catch {}
-    })
-  }
+        setErr(null);
+      } catch (e) {
+        setErr(e);
+      }
+    });
+  };
 
-  return <div ref={refCb} />;
+  return (
+    <>
+      <div ref={refCb} style={{ display: err() ? "none" : "" }} />
+
+      <Show when={err()}>
+        <MonacoEditor value={err()+ ""} readonly={true} />
+      </Show>
+    </>
+  );
 };
