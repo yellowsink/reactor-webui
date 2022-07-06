@@ -50,7 +50,7 @@ export default (props) => {
       <div ref={refCb} style={{ display: err() ? "none" : "" }} />
 
       <Show when={err()}>
-        <MonacoEditor value={err()+ ""} readonly={true} />
+        <MonacoEditor value={err() + ""} readonly={true} />
       </Show>
     </>
   );
