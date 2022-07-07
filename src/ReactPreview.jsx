@@ -10,7 +10,7 @@ export default (props) => {
 
   const transformed = () => {
     try {
-      const res = transformer(props.code, {
+      return transformer(props.code, {
         jsc: {
           target: "es2022",
           parser: {
@@ -18,8 +18,7 @@ export default (props) => {
             jsx: true,
           },
         },
-      });
-      return res.code;
+      }).code;
     } catch (e) {
       setErr(e);
     }

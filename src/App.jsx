@@ -1,22 +1,35 @@
-import { createSignal, onMount, Show } from "solid-js";
-import { render } from "solid-js/web";
+import { createEffect, createSignal } from "solid-js";
+import { reactor } from "./swc.js";
+import MonacoEditor from "./MonacoEditor.jsx";
+import ReactPreview from "./ReactPreview.jsx";
+import SolidPreview from "./SolidPreview.jsx";
 
-import "virtual:windi.css";
-import "virtual:windi-devtools";
+export default () => {
+  const [text, setText] = createSignal("");
+  const [transformed, setTransformed] = createSignal("");
+  const [error, setError] = createSignal();
 
-import { initSwc } from "./swc.js";
-import Editor from "./Editor";
-
-function App() {
-  const [swcIsInited, setSwcInited] = createSignal(false);
-
-  onMount(() => initSwc(setSwcInited));
+  createEffect(() => {
+    try {
+      const { code } = reactor(text());
+      setTransformed(code);
+      setError();
+    } catch (e) {
+      setError(e + "");
+    }
+  });
 
   return (
-    <Show when={swcIsInited()} fallback="SWC is initing, please wait...">
-      <Editor />
-    </Show>
-  );
-}
+    <div class="w-screen h-screen grid grid-cols-2 grid-rows-2">
+      {/* react code */}
+      <MonacoEditor value={text()} valOut={setText} />
 
-render(() => <App />, document.getElementById("root"));
+      {/* solid code */}
+      <MonacoEditor value={error() ?? transformed()} readonly={true} />
+
+      <ReactPreview code={text()} />
+
+      <SolidPreview code={transformed()} />
+    </div>
+  );
+};

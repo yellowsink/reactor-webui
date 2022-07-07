@@ -1,5 +1,6 @@
-import solidCompiler from "./solidCompiler";
-import eseval from "./eseval.js";
+// code split because babel is phat af (as in 3mb phat)
+let solidCompiler;
+import("./solidCompiler.js").then(s => solidCompiler = s.default);
 
 import * as solidjs from "solid-js";
 import * as solidjsweb from "solid-js/web";
@@ -7,11 +8,12 @@ import { createEffect, createSignal, Show } from "solid-js";
 import { render } from "solid-js/web";
 
 import { throttle } from "lodash";
-import MonacoEditor from "./MonacoEditor";
+import MonacoEditor from "./MonacoEditor.jsx";
+import eseval from "./eseval.js";
 
 export default (props) => {
-  const transformed = () => solidCompiler(props.code).code;
-  const transformedDebounced = throttle(transformed, 250);
+  const transformed = () => solidCompiler?.(props.code).code ?? "";
+  const transformedDebounced = throttle(transformed, 250, {trailing: true});
 
   const [err, setErr] = createSignal();
 

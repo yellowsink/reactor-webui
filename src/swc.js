@@ -1,14 +1,19 @@
-import init, { printSync, parseSync } from "@swc/wasm-web";
+import init, { printSync, parseSync, transformSync } from "@swc/wasm-web";
 import { jsxTransform } from "emitkit";
-import reactor from "https://cdn.esm.sh/solid-reactor";
+import reactorPlugin from "https://cdn.esm.sh/solid-reactor?bundle";
 
-export const jsxTranformer = jsxTransform({ printSync, parseSync });
+const internalJsxTransformer = jsxTransform({ printSync, parseSync });
 
-export default (code) => jsxTranformer(code, { plugin: reactor });
+let inited;
+const wrapF = (f) => (c, o) => inited ? f(c, o) : { code: "" };
+
+export const transformer = wrapF(transformSync);
+export const jsxTransformer = wrapF(internalJsxTransformer);
+
+export const reactor = (code) => jsxTransformer(code, { plugin: reactorPlugin });
 
 export const initSwc = async (setInitSignal) => {
   await init();
   setInitSignal(true);
+  inited = true;
 };
-
-export { transformSync as transformer } from "@swc/wasm-web";
